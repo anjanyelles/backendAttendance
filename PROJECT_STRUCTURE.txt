@@ -1,0 +1,36 @@
+lltattendance/
+├── src/
+│   ├── config/
+│   │   ├── database.js
+│   │   └── schema.sql
+│   ├── controllers/
+│   │   ├── adminController.js
+│   │   ├── attendanceController.js
+│   │   ├── authController.js
+│   │   ├── hrController.js
+│   │   ├── leaveController.js
+│   │   ├── managerController.js
+│   │   └── regularizationController.js
+│   ├── middleware/
+│   │   ├── auth.js
+│   │   └── roleCheck.js
+│   ├── routes/
+│   │   ├── admin.js
+│   │   ├── attendance.js
+│   │   ├── auth.js
+│   │   ├── hr.js
+│   │   ├── leave.js
+│   │   ├── manager.js
+│   │   └── regularization.js
+│   ├── utils/
+│   │   ├── haversine.js
+│   │   └── validators.js
+│   └── server.js
+├── .env
+├── .env.example
+├── .gitignore
+├── package.json
+├── package-lock.json
+├── README.md
+├── create-admin-user.js
+└── test-api.sh
