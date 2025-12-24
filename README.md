@@ -14,9 +14,8 @@ A comprehensive backend API for managing employee attendance with location and W
 
 ## Tech Stack
 
-- Node.js (v18+)
+- Node.js (v18+). 
 - Express.js
-- PostgreSQL
 - JWT Authentication
 - bcrypt (password hashing)
 - dotenv (environment variables)
