@@ -24,5 +24,11 @@ router.get('/my', attendanceController.getMyAttendance);
 // GET /api/attendance/my-calendar
 router.get('/my-calendar', attendanceController.getMyMonthlyCalendar);
 
+// POST /api/attendance/heartbeat - Send heartbeat for presence monitoring
+router.post('/heartbeat', attendanceController.sendHeartbeat);
+
+// GET /api/attendance/presence - Get current presence status
+router.get('/presence', attendanceController.getPresenceStatus);
+
 module.exports = router;
 
