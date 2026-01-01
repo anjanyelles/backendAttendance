@@ -1,6 +1,11 @@
 const express = require('express');
 const cors = require('cors');
+const fs = require('fs');
+const path = require('path');
 require('dotenv').config();
+
+// Import database pool
+const pool = require('./config/database');
 
 // Import routes
 const authRoutes = require('./routes/auth');
@@ -90,10 +95,42 @@ app.use((err, req, res, next) => {
   });
 });
 
+// Auto-setup database tables on startup
+async function setupDatabase() {
+  try {
+    // Check if employees table exists
+    const result = await pool.query(`
+      SELECT EXISTS (
+        SELECT FROM information_schema.tables 
+        WHERE table_schema = 'public' 
+        AND table_name = 'employees'
+      );
+    `);
+    
+    // If table doesn't exist, run schema
+    if (!result.rows[0].exists) {
+      console.log('📊 Database tables not found. Setting up database...');
+      const schemaPath = path.join(__dirname, 'config', 'schema.sql');
+      const schema = fs.readFileSync(schemaPath, 'utf8');
+      await pool.query(schema);
+      console.log('✅ Database schema created successfully!');
+    } else {
+      console.log('✅ Database tables already exist');
+    }
+  } catch (error) {
+    console.error('⚠️  Database setup error:', error.message);
+    console.error('   Server will continue, but some features may not work.');
+    console.error('   Make sure database is accessible and schema.sql exists.');
+  }
+}
+
 // Start server - listen on all network interfaces for mobile access
 // In production (Railway/Render), they handle the host binding
 const host = process.env.NODE_ENV === 'production' ? '0.0.0.0' : '0.0.0.0';
-app.listen(PORT, host, () => {
+
+// Setup database, then start server
+setupDatabase().then(() => {
+  app.listen(PORT, host, () => {
   console.log(`Server is running on port ${PORT}`);
   console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
   if (process.env.NODE_ENV !== 'production') {
@@ -118,6 +155,11 @@ app.listen(PORT, host, () => {
   }, 5 * 60 * 1000); // Every 5 minutes
   
   console.log('Heartbeat timeout checker started (runs every 5 minutes)');
+  });
+}).catch((error) => {
+  console.error('❌ Failed to setup database:', error);
+  console.error('Server will not start. Please check your database connection.');
+  process.exit(1);
 });
 
 module.exports = app;

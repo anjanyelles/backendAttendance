@@ -47,11 +47,19 @@ git push origin main
 
 ## Step 4: Connect Database to Backend
 
-1. Click on your **backend service** (the one with your code)
-2. Go to **"Settings"** tab
-3. Scroll to **"Service Connections"**
-4. Click **"Connect"** next to your PostgreSQL service
-5. This automatically shares database variables to your backend
+1. Click on your **PostgreSQL service** in Railway
+2. Go to **"Connect"** tab (or **"Variables"** tab)
+3. You'll see connection instructions. Note the service name (e.g., "Postgres" or "PostgreSQL")
+4. Click on your **backend service** (the one with your code)
+5. Go to **"Variables"** tab
+6. Click **"New Variable"**
+7. **Variable Name:** `DATABASE_URL`
+8. **Variable Value:** `${{ Postgres.DATABASE_URL }}`
+   - Replace `Postgres` with your actual PostgreSQL service name if different
+   - This references the PostgreSQL service's DATABASE_URL automatically
+9. Click **"Add"**
+
+**Note:** Railway will automatically replace `${{ Postgres.DATABASE_URL }}` with the actual connection string from your PostgreSQL service.
 
 ---
 
@@ -82,11 +90,7 @@ DEFAULT_OFFICE_RADIUS=60
 DEFAULT_OFFICE_PUBLIC_IP=203.0.113.1
 ```
 
-**Note:** If you connected PostgreSQL in Step 4, Railway automatically provides:
-- `DATABASE_URL` (connection string)
-- OR `PGHOST`, `PGPORT`, `PGDATABASE`, `PGUSER`, `PGPASSWORD`
-
-Your code supports both, so you don't need to set database variables manually!
+**Important:** You should have already set `DATABASE_URL` in Step 4. Your code automatically uses this connection string, so you don't need to set individual database variables (DB_HOST, DB_PORT, etc.)!
 
 ---
 
@@ -195,8 +199,9 @@ Your backend is now live on Railway!
 ## Troubleshooting
 
 ### ❌ "Database password is not set"
-- Make sure PostgreSQL service is connected to backend (Step 4)
-- Check Variables tab has `DATABASE_URL` or `PGPASSWORD`
+- Make sure you created `DATABASE_URL` variable in Step 4
+- Verify the variable value is: `${{ Postgres.DATABASE_URL }}` (replace "Postgres" with your service name)
+- Check that your PostgreSQL service name matches in the variable reference
 
 ### ❌ "Cannot find module"
 - Make sure `package.json` is in the root directory

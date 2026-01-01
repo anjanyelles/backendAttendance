@@ -13,11 +13,13 @@ Use this checklist to deploy your backend step by step.
 
 ## Database Setup
 - [ ] Added PostgreSQL service to Railway project
-- [ ] Connected PostgreSQL service to backend service (Settings → Service Connections)
+- [ ] Created `DATABASE_URL` variable in backend service with value: `${{ Postgres.DATABASE_URL }}`
+  - (Replace "Postgres" with your actual PostgreSQL service name)
 - [ ] Ran database schema in PostgreSQL Query tab (`src/config/schema.sql`)
 
 ## Environment Variables
 - [ ] Generated JWT_SECRET: `node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"`
+- [ ] Added DATABASE_URL to backend Variables (value: `${{ Postgres.DATABASE_URL }}`)
 - [ ] Added JWT_SECRET to backend Variables
 - [ ] Added JWT_EXPIRES_IN=24h
 - [ ] Added NODE_ENV=production
